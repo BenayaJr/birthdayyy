@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+:root {
+  --brand-gold: #ffb703;
+  --brand-gold-dark: #ff9e00;
+  --brand-cream: #ffe5b4;
+  --brand-rose: #fff5f5;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.12);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.18);
+  --shadow-lg: 0 6px 18px rgba(0,0,0,.25);
+  --pop-duration: .6s;
+  --sparkle-color: #ffd700; /* Gold for sparkles */
+
+  /* New envelope colors for a softer look, matching theme */
+  --envelope-base: #fef9f3; /* Very light cream/off-white, close to brand-rose */
+  --envelope-flap: #fcecdb; /* Slightly darker cream */
+  --envelope-accent: #ffb703; /* Using brand-gold for accent */
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,var(--brand-rose),var(--brand-cream));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#333;
+  overflow-x:hidden;
+  position:relative;
+  /* Add background patterns */
+  background-image:
+    radial-gradient(circle at top left, rgba(255,255,255,0.2) 1px, transparent 1px),
+    radial-gradient(circle at bottom right, rgba(255,255,255,0.2) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.container{
+  width:100%;
+  max-width:800px;
+  padding:20px;
+  text-align:center;
+  animation:fadeIn 1s ease;
+  position:relative; /* For absolute positioning of decorations */
+  z-index:1; /* Ensure container content is above background elements */
+}
+.hidden{display:none !important;}
+h1{
+  font-family:'Dancing Script',cursive;
+  font-size:3.5em; /* Larger for more impact */
+  color:var(--brand-gold-dark);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  margin-bottom:25px;
+}
+h2{
+  font-size:2.2em;
+  color:#555;
+  margin-bottom:20px;
+}
+p{
+  font-size:1.1em;
+  line-height:1.8;
+  margin-bottom:20px;
+  color:#444;
+}
+button{
+  background:var(--brand-gold);
+  color:#fff;
+  border:none;
+  padding:14px 28px;
+  border-radius:30px;
+  font-size:18px;
+  cursor:pointer;
+  margin:12px;
+  transition:transform .2s ease,background .3s,box-shadow .3s;
+  box-shadow:var(--shadow-sm); /* Add shadow to buttons */
+  font-weight: 600;
+}
+button:hover{background:var(--brand-gold-dark);transform:scale(1.07);box-shadow:var(--shadow-md);}
+button:active{transform:scale(0.98);box-shadow:var(--shadow-sm);}
+
+
+/* Envelope */
+.envelope{
+  width:220px;
+  height:160px;
+  background:var(--envelope-base); /* New base color */
+  border-radius:var(--radius-md);
+  position:relative;
+  margin:auto;
+  box-shadow:var(--shadow-md);
+  cursor:pointer;
+  animation:float 2s infinite ease-in-out;
+  border: 2px solid var(--envelope-flap); /* Border matching flap */
+  overflow: hidden; /* Ensure contents don't spill */
+  display: flex; /* For centering the main decoration */
+  justify-content: center;
+  align-items: center;
+}
+.flap{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:50%;
+  background:var(--envelope-flap); /* New flap color */
+  clip-path:polygon(0 0,50% 100%,100% 0);
+  transition:transform 0.5s ease-in-out; /* Smooth flap opening */
+  transform-origin: top; /* Rotate from the top */
+  z-index: 2; /* Ensure flap is above main body */
+  border-bottom: 2px solid rgba(0,0,0,0.05); /* Subtle line */
+}
+.envelope.open .flap{
+  transform: translateY(-100%) rotateX(180deg); /* Rotate flap up and move out of view */
+  z-index: -1; /* Send flap behind letter */
+}
+.envelope-main-decor {
+  font-size: 80px; /* Larger central emoji */
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+  z-index: 1; /* Ensure decorations are above envelope body */
+  color: var(--envelope-accent); /* Use accent color */
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+.envelope:hover .envelope-main-decor {
+  opacity: 1;
+  transform: scale(1.1); /* Slight pop on hover */
+}
+/* More elegant look for the envelope "stamp" or "seal" */
+.envelope-seal {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: var(--envelope-accent); /* Use accent color for seal */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transform: rotate(15deg);
+    transition: transform 0.3s ease;
+    z-index: 3; /* Ensure seal is on top */
+}
+.envelope:hover .envelope-seal {
+    transform: rotate(0deg) scale(1.05);
+}
+/* Subtle pattern on envelope body */
+.envelope::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 90% 90%, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 0;
+}
+
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-5px);}
+}
+
+/* Letter */
+.letter-content{
+  background:#fff;
+  padding:30px; /* More padding */
+  border-radius:var(--radius-lg);
+  line-height:1.7;
+  font-size:1.1em; /* Slightly larger font */
+  box-shadow:var(--shadow-lg); /* Stronger shadow */
+  position:relative;
+  animation:fadeIn 1s ease;
+  text-align:left;
+  border: 1px solid rgba(0,0,0,0.05); /* Subtle border */
+}
+.letter-content::before{
+  content:"💌";
+  position:absolute;
+  top:-35px; /* Adjust position */
+  right:-25px; /* Adjust position */
+  font-size:50px; /* Larger emoji */
+  transform: rotate(10deg); /* Slightly rotate */
+  animation: popIn .5s cubic-bezier(.175,.885,.32,1.275) forwards;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px);} /* More noticeable fade-in */
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes popIn {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  80% { transform: scale(1.1) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(10deg); }
+}
+
+/* Balloons / Floating Emojis */
+.floater{
+  position:fixed;
+  bottom:-80px;
+  font-size:40px;
+  opacity:.8;
+  animation:rise 8s linear forwards;
+  pointer-events:none;
+  z-index:0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Add shadow to floaters */
+}
+@keyframes rise{
+  0%{transform:translateY(0) scale(.8) rotate(0deg);opacity:1;}
+  100%{transform:translateY(-110vh) scale(1.1) rotate(360deg);opacity:0;}
+}
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:8px;
+  height:14px;
+  opacity:.9;
+  pointer-events:none;
+  animation:confetti-fall linear forwards;
+  z-index:9999;
+  border-radius:2px; /* Make confetti pieces more defined */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+@keyframes confetti-fall{
+  0%{transform:translateY(0) rotate(0deg); opacity: 1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+/* Mood Buttons (Top) */
+.mood-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px; /* Increased gap */
+  margin-bottom:30px; /* More space below */
+}
+.mood-card{
+  padding:15px 22px; /* More padding */
+  border-radius:var(--radius-lg);
+  color:#fff;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  text-shadow:1px 1px 3px rgba(0,0,0,.3);
+  transition:transform .25s ease,box-shadow .25s ease,outline .25s ease; /* Add outline transition */
+  box-shadow:var(--shadow-sm);
+  border: 1px solid rgba(255,255,255,0.3); /* Subtle white border */
+}
+.mood-card:hover{transform:scale(1.05);box-shadow:var(--shadow-md);}
+.mood-card.active{outline:4px solid var(--brand-gold-dark); /* Thicker outline when active */
+  box-shadow: 0 0 15px rgba(255,183,3,.6); /* Glow effect */
+  transform: scale(1.02); /* Slightly smaller scale when active */
+}
+.romantic{background:linear-gradient(135deg,#ff7b7b,#ff3e3e);}
+.comedy{background:linear-gradient(135deg,#ffe066,#ffb703);color:#333;}
+.sad{background:linear-gradient(135deg,#8e9aaf,#4a4e69);}
+.surprise{background:linear-gradient(135deg,#ff7eb9,#ff65a3);}
+
+/* Movie grid */
+.movie-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); /* Slightly larger min-width */
+  gap:25px; /* Increased gap */
+  opacity:0;
+  transform:scale(.95);
+  pointer-events:none;
+  transition:opacity .4s ease,transform .4s ease; /* Slightly longer transition */
+}
+.movie-grid.show{
+  opacity:1;
+  transform:scale(1);
+  pointer-events:auto;
+}
+.movie-card{
+  background:#fff;
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
+  cursor:pointer;
+  transform:scale(.8);
+  opacity:0;
+  animation:cardPop .5s cubic-bezier(.175,.885,.32,1.275) forwards; /* Slightly longer animation */
+  border: 1px solid rgba(0,0,0,0.08); /* Subtle border */
+}
+.movie-card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  display:block;
+  transition:transform .35s ease;
+}
+.movie-card:hover img{transform:scale(1.05);}
+.movie-card span{
+  display:block;
+  padding:10px 12px 16px; /* More padding */
+  font-size:16px; /* Slightly larger font */
+  font-weight:600;
+  color:#333;
+}
+.movie-card.selected{
+  outline:4px solid var(--brand-gold-dark); /* Thicker outline when selected */
+  box-shadow:0 0 15px rgba(255,183,3,.8), 0 0 25px rgba(255,183,3,.4); /* Stronger glow */
+}
+@keyframes cardPop{
+  0%{transform:scale(.7) translateY(20px);opacity:0;}
+  100%{transform:scale(1) translateY(0);opacity:1;}
+}
+
+/* Recap */
+#recapText{
+  font-size:24px; /* Larger font */
+  line-height:1.6;
+  margin-top:25px; /* More margin */
+  font-weight: 500;
+}
+.sparkle{
+  position:fixed;
+  width:6px;
+  height:6px;
+  background:var(--sparkle-color);
+  border-radius:50%;
+  pointer-events:none;
+  animation:sparkle 3s linear infinite;
+  box-shadow: 0 0 5px var(--sparkle-color), 0 0 10px var(--sparkle-color); /* Add glow to sparkles */
+  z-index:999;
+}
+@keyframes sparkle{
+  0%,100%{transform:scale(1);opacity:1;}
+  50%{transform:scale(1.8);opacity:.4;}
+}
+
+/* Music button */
+#musicBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:55px; /* Slightly larger button */
+  height:55px; /* Slightly larger button */
+  border-radius:50%;
+  background:var(--brand-gold);
+  color:#fff;
+  border:none;
+  font-size:24px; /* Larger icon */
+  cursor:pointer;
+  box-shadow:var(--shadow-lg);
+  display:none;
+  z-index:10000;
+  transition:transform .25s ease,background .25s ease;
+}
+#musicBtn:hover{background:var(--brand-gold-dark);transform:scale(1.1);}
+
+/* Floating decorations (new) */
+.decoration {
+  position: fixed;
+  font-size: 3em;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: floatAround linear infinite;
+  z-index: 0;
+}
+.decoration:nth-child(1) { top: 10%; left: 5%; animation-duration: 10s; }
+.decoration:nth-child(2) { top: 20%; right: 8%; animation-duration: 12s; }
+.decoration:nth-child(3) { bottom: 15%; left: 12%; animation-duration: 11s; }
+.decoration:nth-child(4) { top: 30%; left: 20%; animation-duration: 9s; }
+.decoration:nth-child(5) { bottom: 5%; right: 10%; animation-duration: 13s; }
+.decoration:nth-child(6) { top: 5%; right: 2%; animation-duration: 11s; }
+@keyframes floatAround {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, 15px) rotate(5deg); }
+  50% { transform: translate(-10px, -5px) rotate(-5deg); }
+  75% { transform: translate(5px, 10px) rotate(3deg); }
+}
+
+/* Pop effect for buttons/elements (new) */
+.pop-effect {
+  animation: popEffect .3s cubic-bezier(.175,.885,.32,1.275) forwards;
+}
+@keyframes popEffect {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  h1 { font-size: 2.8em; }
+  h2 { font-size: 1.8em; }
+  p { font-size: 1em; }
+  button { padding: 12px 24px; font-size: 16px; }
+  .letter-content { padding: 20px; }
+  .mood-card { padding: 10px 15px; font-size: 15px; }
+  .movie-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .envelope { width: 180px; height: 130px; }
+  .envelope-main-decor { font-size: 60px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="decoration">🎂</div>
+<div class="decoration">🎉</div>
+<div class="decoration">✨</div>
+<div class="decoration">🎁</div>
+<div class="decoration">💖</div>
+<div class="decoration">🥳</div>
+
+
+<div class="container" id="page1">
+  <div class="envelope" onclick="openLetter()">
+    <div class="flap"></div>
+    <div class="envelope-main-decor">🐾</div> <div class="envelope-seal">💖</div>
+  </div>
+  <p style="margin-top:10px;">📩 Click the envelope to open</p>
+</div>
+
+<div class="container hidden" id="letterPage">
+  <div class="letter-content pop-effect">
+    <h1>Dear You,</h1>
+    <p>
+      Birthdays can sometimes feel heavy or blue.<br>
+      If that happens for you, I want this little space to feel like a warm hug.<br><br>
+      You brighten rooms. You listen deeply. You care in a way that sticks with people.<br>
+      I notice. I appreciate you. And I’m really glad you’re in my world.<br><br>
+      So… I made you something simple, a little playful, and just for you.<br>
+      Let’s make a memory that feels soft & sweet — like a comfort movie on a rainy day.<br><br>
+      <strong>Happy Birthday! 🌻✨💛</strong>
+    </p>
+  </div>
+  <button onclick="goToInvite()">Next →</button>
+</div>
+
+<div class="container hidden" id="invitePage">
+  <h1 class="pop-effect">Would you join me for a cozy movie night? 🎬</h1>
+  <div id="inviteButtons">
+    <button onclick="acceptInvite()">Yes!</button>
+    <button id="noBtn" onclick="declineInvite()" onmouseover="moveNoButton()">No</button>
+  </div>
+</div>
+
+<div class="container hidden" id="movieOptions">
+  <h2 class="pop-effect">Pick our movie vibe:</h2>
+  <div class="mood-container">
+    <div class="mood-card romantic" data-mood="Romantic" onclick="selectMood(this)">❤️ Romantic</div>
+    <div class="mood-card comedy"    data-mood="Comedy"    onclick="selectMood(this)">😂 Comedy</div>
+    <div class="mood-card sad"       data-mood="Sad"       onclick="selectMood(this)">💔 Sad</div>
+    <div class="mood-card surprise" data-mood="Surprise" onclick="selectMood(this)">🎁 Surprise Me!</div>
+  </div>
+  <div class="movie-grid" id="movieGrid"></div>
+  <button class="hidden" id="continueBtn" onclick="goToRecap()">Continue →</button>
+</div>
+
+<div class="container hidden" id="recapPage">
+  <h2 id="recapText">Great choice! I'll prepare everything... 🍿</h2>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-sweet.mp3" type="audio/mp3" />
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f7c63fdf0b.mp3?filename=soft-piano-ambient-11194.mp3" type="audio/mp3" />
+</audio>
+<button id="musicBtn" onclick="toggleMusic()" aria-label="Toggle music">
+  <i class="fas fa-volume-up"></i>
+</button>
+
+<script>
+const movies = {
+  Romantic: [
+    { title: "La La Land", img: "lala.jpg" },
+    { title: "The Perks of Being a Wallflower", img: "theperks.jpg" },
+    { title: "Beautiful Boy", img: "bboy.jpg" },
+    { title: "A Silent Voice", img: "silent.jpg" },
+    { title: "The Notebook", img: "note.jpg" },
+  ],
+  Comedy: [
+    { title: "10 Things I Hate About You", img: "10things.jpg" },
+    { title: "A Cinderella Story", img: "cinderella.jpg" },
+    { title: "Oh My Girl", img: "omg.jpg" },
+    { title: "Friendzone", img: "friendzone.jpg" },
+    { title: "Long Live Love", img: "3l.jpg" },
+  ],
+  Sad: [
+    { title: "Dead Poets Society", img: "dps.jpg" },
+    { title: "The Pursuit of Happyness", img: "thepursuit.jpg" },
+    { title: "Yes Man", img: "yesman.jpg" },
+    { title: "Manchester by the Sea", img: "manchester.jpg" },
+    { title: "Good Will Hunting", img: "good.jpg" },
+  ]
+};
+
+let noClickCount = 0;
+let chosenMovie = "";
+let chosenMood  = "";
+let floaterInterval = null;
+let musicPlaying = false;
+
+function openLetter(){
+  const envelope = document.querySelector('.envelope');
+  envelope.classList.add('open'); // Add class to open flap
+  setTimeout(() => {
+    show('letterPage');
+    hide('page1');
+    playMusic();
+    confettiBlast();
+    startFloaters();
+  }, 500); // Delay showing letter to match flap animation
+}
+
+function goToInvite(){ hide('letterPage'); show('invitePage'); }
+function acceptInvite(){ hide('invitePage'); show('movieOptions'); }
+function declineInvite(){
+  noClickCount++;
+  const invite = document.querySelector('#invitePage h1');
+  if(noClickCount===1){invite.textContent="Are you sure? I'll bring popcorn 🍿";}
+  else if(noClickCount===2){invite.textContent="Come on, just one movie...? 🥺";}
+  else{
+    invite.textContent="Okay... I'm a little sad 😢";
+    setTimeout(()=>{
+      chosenMovie="Sorry, they declined the movie invitation 💔"; // Changed text for recap
+      goToRecap();
+    },1500);
+  }
+}
+function moveNoButton(){
+  const noBtn=document.getElementById('noBtn');
+  const x=(Math.random()*150-75); // Smaller range for "No" button
+  const y=(Math.random()*70-35); // Smaller range for "No" button
+  noBtn.style.transform=`translate(${x}px,${y}px)`;
+  noBtn.style.transition = 'transform 0.2s ease-out'; // Add transition for smoother movement
+}
+
+
+function selectMood(el){
+  document.querySelectorAll('.mood-card').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+  chosenMood = el.dataset.mood;
+  chosenMovie = "";
+  const grid = document.getElementById('movieGrid');
+  grid.innerHTML='';
+  if(chosenMood==="Surprise"){
+    grid.classList.remove('show');
+    document.getElementById('continueBtn').classList.remove('hidden');
+    document.getElementById('continueBtn').classList.add('pop-effect'); // Add pop effect
+    return;
+  }
+  const list=movies[chosenMood];
+  list.forEach((mv,i)=>{
+    const card=document.createElement('div');
+    card.className='movie-card';
+    card.style.animationDelay = `${i*0.08}s`;
+    card.innerHTML=`<img src="${mv.img}" alt="${mv.title}"/><span>${mv.title}</span>`;
+    card.onclick=()=>selectMovie(card,mv.title);
+    grid.appendChild(card);
+  });
+  requestAnimationFrame(()=>grid.classList.add('show'));
+  document.getElementById('continueBtn').classList.add('hidden');
+}
+
+function selectMovie(card,title){
+  document.querySelectorAll('.movie-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  chosenMovie=title;
+  document.getElementById('continueBtn').classList.remove('hidden');
+  document.getElementById('continueBtn').classList.add('pop-effect'); // Add pop effect
+}
+
+function goToRecap(){
+  hide('movieOptions'); show('recapPage');
+  const recap=document.getElementById('recapText');
+  if(chosenMood==="Surprise" || chosenMovie===""){
+    recap.innerHTML="I'll surprise you with something amazing! 🎁<br>See you soon! ✨";
+  } else if (chosenMovie === "Sorry, they declined the movie invitation 💔") { // New condition for rejection
+    recap.innerHTML=`Oh, it seems we won't be watching a movie this time. But that's okay! 😢<br>Hope you still have a wonderful day! ✨`;
+  }
+  else{
+    recap.innerHTML=`Yay! We'll watch <strong>${chosenMovie}</strong> (${chosenMood}) together! 🍿<br>See you soon! ✨`;
+  }
+  sendMovieChoice(); sparkleBurst();
+  setTimeout(()=>goToPhotoBooth(),5000);
+}
+
+function sendMovieChoice(){
+  let message;
+  if(chosenMood==="Surprise"||chosenMovie===""){ message="They chose Surprise Me! 🎁"; }
+  else if (chosenMovie === "Sorry, they declined the movie invitation 💔") { // Specific message for rejection
+    message = "They declined the movie invitation. So sad! 😢";
+  }
+  else{ message=`Mood: ${chosenMood}, Movie: ${chosenMovie}`; }
+  fetch("https://formspree.io/f/mdkdewow",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({message})
+  }).catch(err=>console.log("Formspree Error:",err));
+}
+
+function goToPhotoBooth(){ stopFloaters(); window.location.href = "https://benayajr.github.io/birthday"; }
+
+function confettiBlast(){
+  for(let i=0;i<60;i++){ // More confetti
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration=2+Math.random()*2+'s';
+    c.style.animationDelay=Math.random()*0.5+'s'; // Staggered start
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+function startFloaters(){
+  if(floaterInterval) return;
+  floaterInterval=setInterval(()=>{
+    const f=document.createElement('div');
+    f.className='floater';
+    const emojis = ['🎈', '💛', '🎉', '🌟', '💖']; // More varied emojis
+    f.textContent=emojis[Math.floor(Math.random() * emojis.length)];
+    f.style.left=Math.random()*100+'vw';
+    f.style.fontSize=30+Math.random()*30+'px'; // Larger range for size
+    f.style.animationDuration=6+Math.random()*4+'s'; // Vary animation duration
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),10000); // Match removal to animation duration
+  },600); // More frequent floaters
+}
+function stopFloaters(){ clearInterval(floaterInterval); }
+function sparkleBurst(){
+  for(let i=0;i<30;i++){ // More sparkles
+    const s=document.createElement('div');
+    s.className='sparkle';
+    s.style.left=Math.random()*100+'vw';
+    s.style.top=Math.random()*100+'vh';
+    s.style.animationDelay = Math.random() * 0.5 + 's'; // Staggered start
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),2000);
+  }
+}
+
+const bgMusic=document.getElementById('bgMusic');
+const musicBtn=document.getElementById('musicBtn');
+
+// Set initial volume (e.g., 0.3 for 30%)
+bgMusic.volume = 0.3;
+
+function playMusic(){
+  const playPromise = bgMusic.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      musicBtn.style.display='block';
+      musicPlaying = true;
+      musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    }).catch(error => {
+      musicBtn.style.display='block';
+      musicPlaying = false;
+      musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      console.log('Autoplay blocked or failed. Please click the music button to play.');
+    });
+  }
+}
+
+function toggleMusic(){
+  if(musicPlaying){
+    bgMusic.pause();
+    musicBtn.innerHTML='<i class="fas fa-volume-mute"></i>';
+  }
+  else{
+    bgMusic.play();
+    musicBtn.innerHTML='<i class="fas fa-volume-up"></i>';
+  }
+  musicPlaying=!musicPlaying;
+}
+
+function show(id){document.getElementById(id).classList.remove('hidden');}
+function hide(id){document.getElementById(id).classList.add('hidden');}
+
+</script>
+</body>
+</html>
